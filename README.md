@@ -16,7 +16,7 @@ The Ghana Stock Exchange is the principal stock exchange of Ghana, located in Ac
 
 - **Data Collection**: Automated scraping of GSE stock prices and financial indicators
 - **Multiple Models**: ARIMA, Linear Regression, and Random Forest predictions
-- **Interactive Visualizations**: Dashboard for exploring stock trends
+- **Interactive Visualizations**: Shiny dashboard for exploring stock trends
 - **Performance Metrics**: Model evaluation with backtesting capabilities
 - **Ghana-Specific Analysis**: Incorporates local economic indicators and market holidays
 
@@ -40,8 +40,8 @@ gse-stock-prediction/
 ## Prerequisites
 
 ### Software Requirements
-- R (version 4.0 or higher)
-- RStudio (recommended IDE)
+- R (version 4.0 or higher) 
+- IDE(Cursor, Rstudio)
 - Git for version control
 
 ### R Packages
@@ -63,25 +63,28 @@ git clone https://github.com/Bempong-Sylvester-Obese/gse-stock-prediction.git
 cd gse-stock-prediction
 ```
 
-2. Open the project in RStudio by double-clicking `gse-stock-prediction.Rproj`
-
-3. Restore the R environment:
-```r
-renv::restore()
+2. Open the project in Cursor:
+```bash
+cursor .
 ```
 
-4. Install additional dependencies:
-```r
-source("scripts/00_setup.R")
+3. Set up the R environment by running in your terminal:
+```bash
+Rscript scripts/00_setup.R
+```
+
+4. Verify R installation and packages:
+```bash
+R --version
 ```
 
 ## Usage
 
 ### Quick Start
-1. Run the setup script to install all dependencies
-2. Execute data collection: `source("scripts/01_data_collection.R")`
-3. Generate predictions: `source("scripts/03_modeling.R")`
-4. View results in the Shiny app: `source("app/app.R")`
+1. Open project in Cursor and run setup: `Rscript scripts/00_setup.R`
+2. Execute data collection: `Rscript scripts/01_data_collection.R`
+3. Generate predictions: `Rscript scripts/03_modeling.R`
+4. View results by running: `Rscript app/run_app.R`
 
 ### Step-by-Step Analysis
 1. **Data Collection** - Gather historical stock prices from GSE
@@ -138,6 +141,15 @@ Model performance will be evaluated using:
 - Ghana Stock Exchange has unique characteristics that may affect model accuracy
 - External factors (political events, global market conditions) are not fully captured
 - Always consult with financial professionals before making investment decisions
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## Future Enhancements
 
