@@ -59,7 +59,7 @@ The following packages will be installed automatically:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/gse-stock-prediction.git
+git clone https://github.com/Bempong-Sylvester-Obese/gse-stock-prediction.git
 cd gse-stock-prediction
 ```
 
