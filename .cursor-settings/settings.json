@@ -1,0 +1,12 @@
+{
+    "r.sessionWatcher": true,
+    "r.bracketedPaste": true,
+    "r.plot.useHttpgd": true,
+    "files.associations": {
+      "*.R": "r",
+      "*.Rmd": "rmd"
+    },
+    "editor.formatOnSave": true,
+    "r.lsp.enabled": true,
+    "terminal.integrated.shell.osx": "/bin/zsh"
+  }

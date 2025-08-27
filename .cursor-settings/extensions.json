@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+      "REditorSupport.r",
+      "REditorSupport.r-debugger",
+      "quarto-dev.quarto",
+      "ms-vscode.vscode-json"
+    ]
+  }
