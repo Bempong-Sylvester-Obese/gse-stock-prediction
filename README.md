@@ -16,7 +16,7 @@ The Ghana Stock Exchange is the principal stock exchange of Ghana, located in Ac
 
 - **Data Collection**: Automated scraping of GSE stock prices and financial indicators
 - **Multiple Models**: ARIMA, Linear Regression, and Random Forest predictions
-- **Interactive Visualizations**: Shiny dashboard for exploring stock trends
+- **Interactive Visualizations**: Dashboard for exploring stock trends
 - **Performance Metrics**: Model evaluation with backtesting capabilities
 - **Ghana-Specific Analysis**: Incorporates local economic indicators and market holidays
 
