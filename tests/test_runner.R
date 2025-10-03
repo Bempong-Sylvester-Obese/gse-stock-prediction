@@ -5,14 +5,13 @@
 library(testthat)
 library(here)
 
-# Suppress variable binding warnings
 utils::globalVariables(c("daily_data", "historical_data", "cleaned_data",
                          "model_result", "predictions", "file"))
 
 # Set working directory
 setwd(here::here())
 
-# Create test directory if it doesn't exist
+# Test directory
 if (!dir.exists("tests")) {
   dir.create("tests", recursive = TRUE)
 }
@@ -132,7 +131,7 @@ test_data_quality <- function() {
         expect_true(col %in% names(daily_data))
       }
 
-      # Test for reasonable data ranges
+      # Test for data ranges
       if ("closing_price_vwap" %in% names(daily_data)) {
         prices <- daily_data$closing_price_vwap
         expect_true(all(prices > 0, na.rm = TRUE)) # Prices should be positive

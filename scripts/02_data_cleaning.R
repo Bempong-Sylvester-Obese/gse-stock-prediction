@@ -181,9 +181,9 @@ create_technical_indicators <- function(data, data_name) {
       ) %>%
       dplyr::ungroup()
 
-    cat("✓ Technical indicators created\n")
+    cat("Technical indicators created\n")
   } else {
-    cat("⚠ No date column found, skipping technical indicators\n")
+    cat("No date column found, skipping technical indicators\n")
   }
 
   data

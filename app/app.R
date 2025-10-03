@@ -8,7 +8,6 @@ library(DT)
 library(here)
 library(lubridate)
 
-# Suppress variable binding warnings for dplyr operations
 utils::globalVariables(c("closing_price_vwap", "share_code", "date",
                          "total_shares_traded", "price_change_pct", "ma_5",
                          "ma_10", "volatility_5", "price", "type", "Model",
@@ -454,7 +453,7 @@ server <- function(input, output, session) {
 
     if (length(stock_models) == 0) return(NULL)
 
-    # Create metrics table
+    # Metrics table
     metrics_table <- data.frame(
       Model = sapply(stock_models, function(x) x$model_type),
       MAE = round(sapply(stock_models, function(x) x$mae), 4),
@@ -474,7 +473,7 @@ server <- function(input, output, session) {
     data <- filtered_data()
     if (is.null(data)) return(NULL)
 
-    # Select key columns for display
+    # Key columns for display
     display_data <- data %>%
       dplyr::select(date, share_code, closing_price_vwap, total_shares_traded,
                     price_change_pct, ma_5, ma_10, volatility_5) %>%
