@@ -232,7 +232,7 @@ train_linear_model <- function(data, stock_code) {
   }
 
   # Prepare features
-  features <- c("price_lag_1", "price_lag_2", 
+  features <- c("price_lag_1", "price_lag_2",
                 "price_lag_3", "price_lag_5", "price_lag_10",
                 "ma_5", "ma_10", "ma_20", "volatility_5", "volatility_10",
                 "volume_ma_5", "volume_ma_10", "year_high_pct")
@@ -241,7 +241,7 @@ train_linear_model <- function(data, stock_code) {
   available_features <- features[features %in% names(stock_data)]
 
   # Create formula
-  formula_str <- paste("closing_price_vwap ~", 
+  formula_str <- paste("closing_price_vwap ~",
                        paste(available_features, collapse = " + "))
   formula <- as.formula(formula_str)
 
@@ -290,7 +290,7 @@ train_linear_model <- function(data, stock_code) {
     return(model_results)
 
   }, error = function(e) {
-    cat(paste("Error training Linear Regression for", 
+    cat(paste("Error training Linear Regression for",
               stock_code, ":", e$message, "\n"))
     NULL
   })
@@ -338,10 +338,10 @@ train_random_forest_model <- function(data, stock_code) {
   tryCatch({
     # Train Random Forest
     rf_model <- randomForest(closing_price_vwap ~ .,
-                            data = train_data,
-                            ntree = 100,
-                            mtry = floor(sqrt(length(available_features))),
-                            importance = TRUE)
+                             data = train_data,
+                             ntree = 100,
+                             mtry = floor(sqrt(length(available_features))),
+                             importance = TRUE)
 
     # Make predictions
     predictions <- predict(rf_model, newdata = test_data)
@@ -379,7 +379,7 @@ train_random_forest_model <- function(data, stock_code) {
     return(model_results)
 
   }, error = function(e) {
-    cat(paste("Error training Random Forest for", 
+    cat(paste("Error training Random Forest for",
               stock_code, ":", e$message, "\n"))
     NULL
   })
@@ -418,7 +418,7 @@ run_modeling_pipeline <- function(data) {
   # Train models for each stock
   for (i in seq_len(nrow(stock_counts))) {
     stock_code <- stock_counts$share_code[i]
-    cat(paste("\nProcessing stock", i, "of", nrow(stock_counts), 
+    cat(paste("\nProcessing stock", i, "of", nrow(stock_counts),
               ":", stock_code, "\n"))
 
     # Train ARIMA model

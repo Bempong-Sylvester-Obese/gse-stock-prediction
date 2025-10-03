@@ -6,7 +6,7 @@ library(here)
 library(tidyverse)
 
 # Suppress variable binding warnings for dplyr operations
-utils::globalVariables(c("%>%", "desc", "arrange", "group_by", "mutate", 
+utils::globalVariables(c("%>%", "desc", "arrange", "group_by", "mutate",
                          "select", "summarise", "ungroup", "filter", "n"))
 
 # Set working directory
@@ -37,7 +37,7 @@ run_script <- function(script_path, script_name) {
 # Main analysis pipeline
 run_complete_analysis <- function() {
   cat("GSE Stock Prediction - Complete Analysis Pipeline\n")
-  cat("="*60 + "\n")
+  cat("=" * 60 + "\n")
 
   # Step 1: Setup
   cat("Step 1: Project Setup\n")
@@ -86,17 +86,17 @@ run_complete_analysis <- function() {
   }
 
   # Summary
-  cat("\n" + "="*60 + "\n")
+  cat("\n" + "=" * 60 + "\n")
   cat("ANALYSIS PIPELINE SUMMARY\n")
-  cat("="*60 + "\n")
+  cat("=" * 60 + "\n")
 
   steps <- c("Setup", "Data Loading",
              "Data Cleaning", "Model Training", "Testing")
   results <- c(setup_success, data_loading_success,
                data_cleaning_success, modeling_success, test_success)
 
-  for (i in 1:length(steps)) {
-    status <- if (results[i]) "✓ PASS" else "⚠ FAIL"
+  for (i in seq_along(steps)) {
+    status <- if (results[i]) "PASS" else "FAIL"
     cat(paste(steps[i], ":", status, "\n"))
   }
 
@@ -109,7 +109,7 @@ run_complete_analysis <- function() {
   if (successful_steps >= 4) { # At least 4 out of 5 steps must succeed
     cat("Analysis pipeline completed successfully!\n")
     cat("You can now run the Shiny app with: Rscript app/run_app.R\n")
-    return(TRUE)
+    TRUE
   } else {
     cat("Analysis pipeline failed. Please check the errors above.\n")
     FALSE

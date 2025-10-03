@@ -57,8 +57,8 @@ run_gse_app <- function() {
 
   # Run the Shiny app
   tryCatch({
-    shiny::runApp("app/app.R", 
-                  host = "127.0.0.1", 
+    shiny::runApp("app/app.R",
+                  host = "127.0.0.1",
                   port = 3838,
                   launch.browser = TRUE)
   }, error = function(e) {

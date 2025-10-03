@@ -7,7 +7,7 @@ library(here)
 library(VIM)
 
 # Suppress variable binding warnings for dplyr operations
-utils::globalVariables(c("%>%", "desc", "arrange", "group_by", "mutate", 
+utils::globalVariables(c("%>%", "desc", "arrange", "group_by", "mutate",
                          "select", "summarise", "ungroup", "filter", "n"))
 
 # Set working directory

@@ -197,7 +197,7 @@ server <- function(input, output, session) {
     if (is.null(data) || is.null(input$stock_code)) return(NULL)
     data %>%
       dplyr::filter(share_code == input$stock_code) %>%
-      dplyr::filter(date >= input$date_range[1] & 
+      dplyr::filter(date >= input$date_range[1] &
                       date <= input$date_range[2]) %>%
       dplyr::arrange(date)
   })
@@ -236,7 +236,7 @@ server <- function(input, output, session) {
 
     # Create performance summary
     performance_summary <- data.frame(
-      Metric = c("Current Price", "Price Change", "Price Change %", 
+      Metric = c("Current Price", "Price Change", "Price Change %",
                  "Volatility %"),
       Value = c(
         paste("GHS", round(latest_price, 2)),
@@ -246,7 +246,7 @@ server <- function(input, output, session) {
       )
     )
 
-    DT::datatable(performance_summary, 
+    DT::datatable(performance_summary,
                   options = list(dom = "t", pageLength = 10),
                   rownames = FALSE)
   })
@@ -259,9 +259,9 @@ server <- function(input, output, session) {
     stats <- paste(
       "Data Points:", nrow(data), "\n",
       "Date Range:", min(data$date), "to", max(data$date), "\n",
-      "Min Price: GHS", 
+      "Min Price: GHS",
       round(min(data$closing_price_vwap, na.rm = TRUE), 2), "\n",
-      "Max Price: GHS", 
+      "Max Price: GHS",
       round(max(data$closing_price_vwap, na.rm = TRUE), 2), "\n",
       "Avg Price: GHS",
       round(mean(data$closing_price_vwap, na.rm = TRUE), 2), "\n",
@@ -281,10 +281,10 @@ server <- function(input, output, session) {
     # Get model results for selected stock and model type
     model_key <- paste(input$stock_code, input$model_type)
 
-    if (!is.null(data$daily_models) && 
+    if (!is.null(data$daily_models) &&
           model_key %in% names(data$daily_models)) {
       model_result <- data$daily_models[[model_key]]
-    } else if (!is.null(data$historical_models) && 
+    } else if (!is.null(data$historical_models) &&
                  model_key %in% names(data$historical_models)) {
       model_result <- data$historical_models[[model_key]]
     } else {
@@ -312,8 +312,8 @@ server <- function(input, output, session) {
     recent_trend <- mean(tail(diff(data$closing_price_vwap), 5), na.rm = TRUE)
 
     # Generate predictions
-    future_dates <- seq(max(data$date) + 1, 
-                        max(data$date) + input$prediction_days, 
+    future_dates <- seq(max(data$date) + 1,
+                        max(data$date) + input$prediction_days,
                         by = "day")
     predictions <- last_price + (1:input$prediction_days) * recent_trend
 
@@ -363,7 +363,7 @@ server <- function(input, output, session) {
     last_price <- tail(data$closing_price_vwap, 1)
     recent_trend <- mean(tail(diff(data$closing_price_vwap), 5), na.rm = TRUE)
 
-    future_dates <- seq(max(data$date) + 1, 
+    future_dates <- seq(max(data$date) + 1,
                         max(data$date) + input$prediction_days,
                         by = "day")
     predictions <- last_price + (1:input$prediction_days) * recent_trend
@@ -391,8 +391,8 @@ server <- function(input, output, session) {
     stock_models <- list()
 
     if (!is.null(data$daily_models)) {
-      stock_models <- c(stock_models, 
-                        data$daily_models[grepl(input$stock_code, 
+      stock_models <- c(stock_models,
+                        data$daily_models[grepl(input$stock_code,
                                                 names(data$daily_models))])
     }
 
@@ -461,7 +461,7 @@ server <- function(input, output, session) {
       RMSE = round(sapply(stock_models, function(x) x$rmse), 4),
       MAPE = round(sapply(stock_models, function(x) x$mape), 2),
       Directional_Accuracy = round(sapply(stock_models,
-                                        function(x) x$directional_accuracy), 2)
+                                          function(x) x$directional_accuracy), 2)
     )
 
     DT::datatable(metrics_table,
@@ -476,7 +476,7 @@ server <- function(input, output, session) {
 
     # Select key columns for display
     display_data <- data %>%
-      dplyr::select(date, share_code, closing_price_vwap, total_shares_traded, 
+      dplyr::select(date, share_code, closing_price_vwap, total_shares_traded,
                     price_change_pct, ma_5, ma_10, volatility_5) %>%
       dplyr::arrange(dplyr::desc(date))
 

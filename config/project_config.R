@@ -206,7 +206,7 @@ load_config <- function() {
   if (file.exists("config/project_config.rds")) {
     config <- readRDS("config/project_config.rds")
     cat("Configuration loaded from config/project_config.rds\n")
-    return(config)
+    config
   } else {
     cat("Configuration file not found. Using default configuration.\n")
     export_config()

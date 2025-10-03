@@ -6,7 +6,7 @@ library(testthat)
 library(here)
 
 # Suppress variable binding warnings
-utils::globalVariables(c("daily_data", "historical_data", "cleaned_data", 
+utils::globalVariables(c("daily_data", "historical_data", "cleaned_data",
                          "model_result", "predictions", "file"))
 
 # Set working directory
@@ -199,9 +199,9 @@ run_all_tests <- function() {
   })
 
   # Summary
-  cat("\n" + "="*40 + "\n")
+  cat("\n" + "=" * 40 + "\n")
   cat("TEST SUMMARY\n")
-  cat("="*40 + "\n")
+  cat("=" * 40 + "\n")
 
   passed_tests <- sum(unlist(test_results))
   total_tests <- length(test_results)
