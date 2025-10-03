@@ -1,5 +1,5 @@
 # GSE Stock Prediction - Complete Analysis Pipeline
-# This script runs the entire analysis pipeline from data loading to model training
+# This script runs the entire analysis pipeline
 
 # Load required libraries
 library(here)
@@ -14,7 +14,8 @@ setwd(here::here())
 
 # Create log file
 log_file <- file("logs/complete_analysis.log", open = "w")
-cat("GSE Complete Analysis Pipeline Started at:", Sys.time(), "\n", file = log_file)
+cat("GSE Complete Analysis Pipeline Started at:", Sys.time(),
+    "\n", file = log_file)
 
 # Function to run script with error handling
 run_script <- function(script_path, script_name) {
@@ -29,7 +30,7 @@ run_script <- function(script_path, script_name) {
   }, error = function(e) {
     cat(paste("⚠", script_name, "failed:", e$message, "\n"))
     cat(paste("⚠", script_name, "failed:", e$message, "\n"), file = log_file)
-    return(FALSE)
+    FALSE
   })
 }
 
@@ -44,25 +45,27 @@ run_complete_analysis <- function() {
 
   if (!setup_success) {
     cat("⚠ Setup failed. Cannot continue.\n")
-    return(FALSE)
+    FALSE
   }
 
   # Step 2: Data Loading
   cat("\nStep 2: Data Loading\n")
-  data_loading_success <- run_script("scripts/01_data_loading.R", "Data Loading")
+  data_loading_success <- run_script("scripts/01_data_loading.R",
+                                     "Data Loading")
 
   if (!data_loading_success) {
     cat("⚠ Data loading failed. Cannot continue.\n")
-    return(FALSE)
+    FALSE
   }
 
   # Step 3: Data Cleaning
   cat("\nStep 3: Data Cleaning\n")
-  data_cleaning_success <- run_script("scripts/02_data_cleaning.R", "Data Cleaning")
+  data_cleaning_success <- run_script("scripts/02_data_cleaning.R",
+                                      "Data Cleaning")
 
   if (!data_cleaning_success) {
     cat("⚠ Data cleaning failed. Cannot continue.\n")
-    return(FALSE)
+    FALSE
   }
 
   # Step 4: Modeling
@@ -71,7 +74,7 @@ run_complete_analysis <- function() {
 
   if (!modeling_success) {
     cat("⚠ Modeling failed. Cannot continue.\n")
-    return(FALSE)
+    FALSE
   }
 
   # Step 5: Testing
@@ -87,8 +90,10 @@ run_complete_analysis <- function() {
   cat("ANALYSIS PIPELINE SUMMARY\n")
   cat("="*60 + "\n")
 
-  steps <- c("Setup", "Data Loading", "Data Cleaning", "Model Training", "Testing")
-  results <- c(setup_success, data_loading_success, data_cleaning_success, modeling_success, test_success)
+  steps <- c("Setup", "Data Loading",
+             "Data Cleaning", "Model Training", "Testing")
+  results <- c(setup_success, data_loading_success,
+               data_cleaning_success, modeling_success, test_success)
 
   for (i in 1:length(steps)) {
     status <- if (results[i]) "✓ PASS" else "⚠ FAIL"
@@ -98,7 +103,8 @@ run_complete_analysis <- function() {
   successful_steps <- sum(results)
   total_steps <- length(results)
 
-  cat(paste("\nOverall:", successful_steps, "of", total_steps, "steps completed successfully\n"))
+  cat(paste("\nOverall:", successful_steps, "of",
+            total_steps, "steps completed successfully\n"))
 
   if (successful_steps >= 4) { # At least 4 out of 5 steps must succeed
     cat("Analysis pipeline completed successfully!\n")
@@ -106,7 +112,7 @@ run_complete_analysis <- function() {
     return(TRUE)
   } else {
     cat("Analysis pipeline failed. Please check the errors above.\n")
-    return(FALSE)
+    FALSE
   }
 }
 
@@ -132,10 +138,12 @@ if (length(commandArgs(trailingOnly = TRUE)) > 0) {
 
   if (args[1] == "all") {
     run_complete_analysis()
-  } else if (args[1] %in% c("setup", "loading", "cleaning", "modeling", "testing", "app")) {
+  } else if (args[1] %in% c("setup", "loading",
+                            "cleaning", "modeling", "testing", "app")) {
     run_component(args[1])
   } else {
-    cat("Usage: Rscript scripts/run_analysis.R [all|setup|loading|cleaning|modeling|testing|app]\n")
+    cat("Usage: Rscript scripts/run_analysis.R 
+                      [all|setup|loading|cleaning|modeling|testing|app]\n")
   }
 } else {
   # Interactive mode
@@ -169,5 +177,6 @@ if (length(commandArgs(trailingOnly = TRUE)) > 0) {
 }
 
 # Close log file
-cat("Complete analysis pipeline finished at:", Sys.time(), "\n", file = log_file)
+cat("Complete analysis pipeline finished at:",
+    Sys.time(), "\n", file = log_file)
 close(log_file)
