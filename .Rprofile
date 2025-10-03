@@ -1,4 +1,3 @@
-# Project-specific R configuration
 options(
   repos = c(CRAN = "https://cloud.r-project.org/"),
   browserNLdisabled = TRUE,
