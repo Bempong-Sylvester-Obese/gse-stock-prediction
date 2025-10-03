@@ -19,6 +19,10 @@ The Ghana Stock Exchange is the principal stock exchange of Ghana, located in Ac
 - **Interactive Visualizations**: Shiny dashboard for exploring stock trends
 - **Performance Metrics**: Model evaluation with backtesting capabilities
 - **Ghana-Specific Analysis**: Incorporates local economic indicators and market holidays
+- **Interactive Dashboard**: Real-time Shiny web application for exploring predictions
+- **Automated Testing**: Comprehensive test suite for data validation
+- **Reproducible Environment**: R environment management with renv
+- **Logging System**: Detailed logging for all data processing steps
 
 ## Project Structure
 
@@ -26,15 +30,42 @@ The Ghana Stock Exchange is the principal stock exchange of Ghana, located in Ac
 gse-stock-prediction/
 ├── README.md
 ├── .gitignore
+├── LICENSE
+├── Makefile
+├── NAMESPACE
 ├── gse-stock-prediction.Rproj
 ├── renv.lock
-├── data/
-├── scripts/
-├── models/
-├── output/
-├── docs/
-├── tests/
-└── app/
+├── app/                    # Shiny dashboard application
+│   ├── app.R
+│   └── run_app.R
+├── config/                 # Project configuration
+│   ├── project_config.R
+│   └── project_config.rds
+├── data/                   # Data storage
+│   ├── raw/               # Original CSV data files
+│   ├── processed/         # Cleaned and processed data
+│   ├── cleaned/           # Additional cleaned data
+│   ├── DebtsReport/       # GFIM debt reports (2023-2025)
+│   └── EquitiesReport/    # GSE equity reports (2023-2025)
+├── scripts/               # Analysis scripts
+│   ├── 00_setup.R
+│   ├── 01_data_loading.R
+│   ├── 02_data_cleaning.R
+│   ├── 03_modeling.R
+│   └── run_analysis.R
+├── models/                # Model storage
+│   ├── saved/
+│   └── trained/
+├── output/                # Results and outputs
+│   ├── plots/
+│   ├── predictions/
+│   └── reports/
+├── tests/                 # Test suite
+│   └── test_runner.R
+├── logs/                  # Log files
+├── notebooks/             # Jupyter notebooks
+├── src/                   # Source code
+└── renv/                  # R environment management
 ```
 
 ## Prerequisites
@@ -70,21 +101,84 @@ cursor .
 
 3. Set up the R environment by running in your terminal:
 ```bash
+# Option 1: Using Makefile (recommended)
+make setup
+
+# Option 2: Direct R script execution
 Rscript scripts/00_setup.R
 ```
 
-4. Verify R installation and packages:
+4. Install project dependencies:
+```bash
+# Option 1: Using Makefile (recommended)
+make install-deps
+
+# Option 2: Direct R command
+Rscript -e "renv::restore()"
+```
+
+5. Verify R installation and packages:
 ```bash
 R --version
 ```
 
+## Configuration
+
+The project uses a centralized configuration system:
+
+- **`config/project_config.R`** - Main configuration file containing:
+  - Data file paths and locations
+  - Model parameters and settings
+  - Output directories and naming conventions
+  - Logging configurations
+  - Default analysis parameters
+
+- **`config/project_config.rds`** - Serialized configuration object for runtime use
+
+To modify project settings, edit the configuration file and reload:
+```r
+source("config/project_config.R")
+```
+
 ## Usage
+
+### Using Makefile Commands (Recommended)
+
+The project includes a `Makefile` for easy command execution:
+
+```bash
+# Complete analysis pipeline
+make run-pipeline
+
+# Individual steps
+make setup          # Setup project environment
+make load-data      # Load and validate data
+make clean-data     # Clean and preprocess data
+make train-models   # Train prediction models
+make test           # Run test suite
+make serve-app      # Start Shiny dashboard
+make clean          # Clean output files
+make install-deps   # Install dependencies
+make help           # Show available commands
+```
 
 ### Quick Start
 1. Open project in Cursor and run setup: `Rscript scripts/00_setup.R`
-2. Execute data collection: `Rscript scripts/01_data_collection.R`
-3. Generate predictions: `Rscript scripts/03_modeling.R`
-4. View results by running: `Rscript app/run_app.R`
+2. Load and process data: `Rscript scripts/01_data_loading.R`
+3. Clean and preprocess data: `Rscript scripts/02_data_cleaning.R`
+4. Train models and generate predictions: `Rscript scripts/03_modeling.R`
+5. View results by running: `Rscript app/run_app.R`
+
+### Testing
+
+Run the test suite to validate data quality and model performance:
+```bash
+# Using Makefile
+make test
+
+# Direct execution
+Rscript tests/test_runner.R
+```
 
 ### Step-by-Step Analysis
 1. **Data Collection** - Gather historical stock prices from GSE
@@ -98,7 +192,15 @@ R --version
 ## Data Sources
 
 - **Primary**: Ghana Stock Exchange official data
-- **Secondary**: Yahoo Finance for additional historical data
+  - Daily Shares & ETFs 2023 CSV files
+  - Updated GSE ETFs and Shares data
+- **Market Reports**: 
+  - GSE Equities Market Reports (2023-2025)
+  - GFIM Status Reports (2023-2025)
+- **Processed Data**:
+  - Cleaned daily trading data (daily_2023_clean.rds)
+  - Historical clean data (historical_clean.rds)
+  - Data quality reports and summaries
 - **Economic Indicators**: Bank of Ghana economic data
 - **Market News**: Ghana business news sentiment analysis
 
@@ -118,12 +220,13 @@ R --version
 
 ## Key Files Description
 
-- `scripts/01_data_collection.R` - Downloads and processes stock data
-- `scripts/02_data_cleaning.R` - Cleans and prepares data for analysis
+- `scripts/01_data_loading.R` - Loads and validates GSE stock data
+- `scripts/02_data_cleaning.R` - Cleans and preprocesses data for analysis
 - `scripts/03_modeling.R` - Builds and trains prediction models
-- `scripts/04_evaluation.R` - Evaluates model performance
+- `scripts/run_analysis.R` - Runs the complete analysis pipeline
 - `app/app.R` - Interactive Shiny dashboard
-- `docs/analysis_report.Rmd` - Comprehensive analysis report
+- `config/project_config.R` - Project configuration settings
+- `tests/test_runner.R` - Test suite for data validation
 
 ## Results and Performance
 
@@ -153,12 +256,19 @@ Contributions are welcome! Please follow these steps:
 
 ## Future Enhancements
 
+- [x] Interactive Shiny dashboard
+- [x] Automated data processing pipeline
+- [x] Comprehensive test suite
+- [x] Reproducible environment management
+- [x] Logging system
 - [ ] Real-time data integration
-- [ ] More sophisticated deep learning models
+- [ ] More sophisticated deep learning models (LSTM, GRU)
 - [ ] Integration with news sentiment analysis
-- [ ] Mobile-responsive dashboard
+- [ ] Mobile-responsive dashboard improvements
 - [ ] Email alerts for price predictions
 - [ ] Portfolio optimization features
+- [ ] API endpoints for external access
+- [ ] Docker containerization
 
 ## License
 
