@@ -29,7 +29,7 @@ cat("Loading cleaned data...\n")
 
 if (file.exists("data/cleaned/daily_2023_cleaned.rds")) {
   daily_data <- readRDS("data/cleaned/daily_2023_cleaned.rds")
-  cat("✓ Daily 2023 data loaded\n")
+  cat("Daily 2023 data loaded\n")
 } else {
   cat("⚠ Daily 2023 cleaned data not found. Run 02_data_cleaning.R first.\n")
   daily_data <- NULL
