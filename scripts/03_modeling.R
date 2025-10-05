@@ -17,7 +17,7 @@ utils::globalVariables(c("share_code", "closing_price_vwap", "price_lag_1",
                          "summarise", "ungroup", "all_of", "%>%", "auto.arima",
                          "forecast", "randomForest"))
 
-# Set working directory
+# Working directory
 setwd(here::here())
 
 # Create log file
@@ -202,7 +202,7 @@ train_arima_model <- function(data, stock_code) {
       model_type = "ARIMA"
     )
 
-    cat(paste("✓ ARIMA model trained for", stock_code, "\n"))
+    cat(paste("ARIMA model trained for", stock_code, "\n"))
     cat(paste("  MAE:", round(mae, 4), "\n"))
     cat(paste("  RMSE:", round(rmse, 4), "\n"))
     cat(paste("  MAPE:", round(mape, 2), "%\n"))
@@ -469,7 +469,7 @@ if (exists("historical_results") && !is.null(historical_results)) {
   cat("✓ Historical models saved\n")
 }
 
-# Create model comparison summary
+# Model comparison summary
 create_model_summary <- function(results) {
   if (is.null(results)) return(NULL)
 
@@ -486,7 +486,7 @@ create_model_summary <- function(results) {
   summary_data
 }
 
-# Generate summaries
+# Summaries
 if (exists("daily_results")) {
   daily_summary <- create_model_summary(daily_results)
   if (!is.null(daily_summary)) {
@@ -507,22 +507,22 @@ if (exists("historical_results")) {
 cat("Modeling completed at:", Sys.time(), "\n", file = log_file)
 close(log_file)
 
-# Display final summary
+# Final summary
 cat("\n")
 cat(paste(rep("=", 60), collapse = ""), "\n")
 cat("GSE MODELING SUMMARY\n")
 cat(paste(rep("=", 60), collapse = ""), "\n")
 
 if (exists("daily_results")) {
-  cat("✓ Daily models trained:", length(daily_results), "models\n")
+  cat("Daily models trained:", length(daily_results), "models\n")
 }
 
 if (exists("historical_results")) {
-  cat("✓ Historical models trained:", length(historical_results), "models\n")
+  cat("Historical models trained:", length(historical_results), "models\n")
 }
 
-cat("✓ Models saved to: models/trained/\n")
-cat("✓ Model summaries generated\n")
+cat("Models saved to: models/trained/\n")
+cat("Model summaries generated\n")
 cat(paste(rep("=", 60), collapse = ""), "\n")
 
 cat("\nModeling completed successfully!\n")
