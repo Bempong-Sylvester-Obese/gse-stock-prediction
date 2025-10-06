@@ -25,7 +25,7 @@ required_packages <- c(
   "e1071",          # SVM and other ML algorithms
   "VIM",            # Missing data visualization
   "corrplot",       # Correlation plots
-  "gridExtra",      # Grid arrangements
+  "gridExtra",      # Grid arrangement
   "knitr",          # Report generation
   "rmarkdown",      # Markdown reports
   "shiny",          # Web applications
