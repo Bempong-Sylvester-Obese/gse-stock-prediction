@@ -23,9 +23,9 @@ required_packages <- c(
   "randomForest",   # Random Forest model
   "caret",          # Machine learning
   "e1071",          # SVM and other ML algorithms
-  "VIM",            # Missing data visualization
+  "VIM",            # Missing data visualizations
   "corrplot",       # Correlation plots
-  "gridExtra",      # Grid arrangement
+  "gridExtra",      # Grid arrangements
   "knitr",          # Report generation
   "rmarkdown",      # Markdown reports
   "shiny",          # Web applications
