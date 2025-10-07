@@ -1,0 +1,14 @@
+GSE Data Cleaning Started at: 1759855397 
+Missing values handled for Daily 2023 
+Before: 6683 After: 0 
+Outliers handled for Daily 2023 : 36195 
+Validation completed for Daily 2023 
+Missing values: 0 
+Infinite values: 0 
+Missing values handled for Historical 
+Before: 0 After: 0 
+Outliers handled for Historical : 217361 
+Validation completed for Historical 
+Missing values: 48843 
+Infinite values: 1651 
+Data cleaning completed at: 1759855400 

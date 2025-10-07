@@ -200,9 +200,8 @@ validate_cleaned_data <- function(data, data_name) {
   cat(paste("Remaining missing values:", missing_count, "\n"))
 
   # Check for infinite values
-  infinite_count <- sum(is.infinite(
-    as.matrix(data[dplyr::select_if(data, is.numeric)])
-  ))
+  numeric_cols <- dplyr::select_if(data, is.numeric)
+  infinite_count <- sum(is.infinite(as.matrix(numeric_cols)))
   cat(paste("Infinite values:", infinite_count, "\n"))
 
   # Check data consistency

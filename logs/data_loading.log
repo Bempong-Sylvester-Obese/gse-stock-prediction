@@ -1,4 +1,4 @@
-GSE Data Loading Started at: 1759497067 
+GSE Data Loading Started at: 1759854950 
 Loaded Daily Shares 2023 with 25262 rows and 13 columns
 Loaded Historical GSE Data with 141996 rows and 12 columns
 Validation completed for Daily 2023 Data 
@@ -7,4 +7,4 @@ Duplicate rows: 215
 Validation completed for Historical Data 
 Missing values found in 0 columns
 Duplicate rows: 136 
-Data loading completed at: 1759497069 
+Data loading completed at: 1759854975 
