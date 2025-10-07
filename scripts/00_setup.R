@@ -1,6 +1,9 @@
 # GSE Stock Prediction Project Setup Script
 # This script sets up the project environment and loads required packages
 
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
 # Set working directory to project root
 if (!require(here)) {
   install.packages("here")
