@@ -460,7 +460,8 @@ server <- function(input, output, session) {
       RMSE = round(sapply(stock_models, function(x) x$rmse), 4),
       MAPE = round(sapply(stock_models, function(x) x$mape), 2),
       Directional_Accuracy = round(sapply(stock_models,
-                                          function(x) x$directional_accuracy), 2)
+                                          function(x) x$directional_accuracy),
+                                   2)
     )
 
     DT::datatable(metrics_table,
