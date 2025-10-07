@@ -52,48 +52,52 @@ prepare_modeling_data <- function(data, target_stock = NULL) {
   # Filter for specific stock if provided
   if (!is.null(target_stock)) {
     data <- data %>%
-      filter(share_code == target_stock)
+      dplyr::filter(share_code == target_stock)
     cat(paste("Filtered for stock:", target_stock, "\n"))
   }
 
+  # Determine column names based on data type
+  date_col <- if ("daily_date" %in% names(data)) "daily_date" else "date"
+  price_col <- if ("closing_price_vwap_gh" %in% names(data)) "closing_price_vwap_gh" else "closing_price_vwap"
+  
   # Ensure data is sorted by date
   data <- data %>%
-    arrange(date) %>%
-    filter(!is.na(closing_price_vwap)) %>%
-    filter(closing_price_vwap > 0)
+    dplyr::arrange(!!sym(date_col)) %>%
+    dplyr::filter(!is.na(!!sym(price_col))) %>%
+    dplyr::filter(!!sym(price_col) > 0)
 
   # Create lagged features
   data <- data %>%
     group_by(share_code) %>%
     mutate(
-      price_lag_1 = lag(closing_price_vwap, 1),
-      price_lag_2 = lag(closing_price_vwap, 2),
-      price_lag_3 = lag(closing_price_vwap, 3),
-      price_lag_5 = lag(closing_price_vwap, 5),
-      price_lag_10 = lag(closing_price_vwap, 10),
+      price_lag_1 = lag(!!sym(price_col), 1),
+      price_lag_2 = lag(!!sym(price_col), 2),
+      price_lag_3 = lag(!!sym(price_col), 3),
+      price_lag_5 = lag(!!sym(price_col), 5),
+      price_lag_10 = lag(!!sym(price_col), 10),
 
       # Price changes
-      price_change_1 = closing_price_vwap - price_lag_1,
-      price_change_2 = closing_price_vwap - price_lag_2,
-      price_change_5 = closing_price_vwap - price_lag_5,
+      price_change_1 = !!sym(price_col) - price_lag_1,
+      price_change_2 = !!sym(price_col) - price_lag_2,
+      price_change_5 = !!sym(price_col) - price_lag_5,
 
       # Volume features
       volume_lag_1 = lag(total_shares_traded, 1),
       volume_change = total_shares_traded - volume_lag_1,
 
       # Technical indicators
-      rsi = calculate_rsi(closing_price_vwap, 14),
-      macd = calculate_macd(closing_price_vwap),
-      bollinger_upper = calculate_bollinger_upper(closing_price_vwap, 20),
-      bollinger_lower = calculate_bollinger_lower(closing_price_vwap, 20)
+      rsi = calculate_rsi(!!sym(price_col), 14),
+      macd = calculate_macd(!!sym(price_col)),
+      bollinger_upper = calculate_bollinger_upper(!!sym(price_col), 20),
+      bollinger_lower = calculate_bollinger_lower(!!sym(price_col), 20)
     ) %>%
     ungroup()
 
   # Remove rows with missing values
   data <- data %>%
-    filter(!is.na(price_lag_1)) %>%
-    filter(!is.na(price_lag_2)) %>%
-    filter(!is.na(price_lag_3))
+    dplyr::filter(!is.na(price_lag_1)) %>%
+    dplyr::filter(!is.na(price_lag_2)) %>%
+    dplyr::filter(!is.na(price_lag_3))
 
   cat(paste("Prepared data:", nrow(data), "rows\n"))
 
@@ -148,10 +152,14 @@ calculate_bollinger_lower <- function(prices, period = 20, std_dev = 2) {
 train_arima_model <- function(data, stock_code) {
   cat(paste("Training ARIMA model for", stock_code, "...\n"))
 
+  # Determine column names
+  date_col <- if ("daily_date" %in% names(data)) "daily_date" else "date"
+  price_col <- if ("closing_price_vwap_gh" %in% names(data)) "closing_price_vwap_gh" else "closing_price_vwap"
+  
   # Filter data for specific stock
   stock_data <- data %>%
-    filter(share_code == stock_code) %>%
-    arrange(date)
+    dplyr::filter(share_code == stock_code) %>%
+    dplyr::arrange(!!sym(date_col))
 
   if (nrow(stock_data) < 30) {
     cat(paste("⚠ Insufficient data for", stock_code, "\n"))
@@ -159,7 +167,7 @@ train_arima_model <- function(data, stock_code) {
   }
 
   # Create time series
-  ts_data <- ts(stock_data$closing_price_vwap, frequency = 1)
+  ts_data <- ts(stock_data[[price_col]], frequency = 1)
 
   # Split data into train and test
   train_size <- floor(0.8 * length(ts_data))
@@ -220,11 +228,15 @@ train_arima_model <- function(data, stock_code) {
 train_linear_model <- function(data, stock_code) {
   cat(paste("Training Linear Regression model for", stock_code, "...\n"))
 
+  # Determine column names
+  date_col <- if ("daily_date" %in% names(data)) "daily_date" else "date"
+  price_col <- if ("closing_price_vwap_gh" %in% names(data)) "closing_price_vwap_gh" else "closing_price_vwap"
+  
   # Filter data for specific stock
   stock_data <- data %>%
-    filter(share_code == stock_code) %>%
-    arrange(date) %>%
-    filter(!is.na(price_lag_1) & !is.na(price_lag_2) & !is.na(price_lag_3))
+    dplyr::filter(share_code == stock_code) %>%
+    dplyr::arrange(!!sym(date_col)) %>%
+    dplyr::filter(!is.na(price_lag_1) & !is.na(price_lag_2) & !is.na(price_lag_3))
 
   if (nrow(stock_data) < 30) {
     cat(paste("Insufficient data for", stock_code, "\n"))
@@ -241,7 +253,7 @@ train_linear_model <- function(data, stock_code) {
   available_features <- features[features %in% names(stock_data)]
 
   # Create formula
-  formula_str <- paste("closing_price_vwap ~",
+  formula_str <- paste(price_col, "~",
                        paste(available_features, collapse = " + "))
   formula <- as.formula(formula_str)
 
@@ -300,11 +312,15 @@ train_linear_model <- function(data, stock_code) {
 train_random_forest_model <- function(data, stock_code) {
   cat(paste("Training Random Forest model for", stock_code, "...\n"))
 
+  # Determine column names
+  date_col <- if ("daily_date" %in% names(data)) "daily_date" else "date"
+  price_col <- if ("closing_price_vwap_gh" %in% names(data)) "closing_price_vwap_gh" else "closing_price_vwap"
+  
   # Filter data for specific stock
   stock_data <- data %>%
-    filter(share_code == stock_code) %>%
-    arrange(date) %>%
-    filter(!is.na(price_lag_1) & !is.na(price_lag_2) & !is.na(price_lag_3))
+    dplyr::filter(share_code == stock_code) %>%
+    dplyr::arrange(!!sym(date_col)) %>%
+    dplyr::filter(!is.na(price_lag_1) & !is.na(price_lag_2) & !is.na(price_lag_3))
 
   if (nrow(stock_data) < 30) {
     cat(paste("Insufficient data for", stock_code, "\n"))
@@ -322,7 +338,7 @@ train_random_forest_model <- function(data, stock_code) {
 
   # Prepare data for Random Forest
   rf_data <- stock_data %>%
-    select(all_of(c("closing_price_vwap", available_features))) %>%
+    select(all_of(c(price_col, available_features))) %>%
     filter(complete.cases(.))
 
   if (nrow(rf_data) < 20) {
@@ -337,7 +353,7 @@ train_random_forest_model <- function(data, stock_code) {
 
   tryCatch({
     # Train Random Forest
-    rf_model <- randomForest(closing_price_vwap ~ .,
+    rf_model <- randomForest(as.formula(paste(price_col, "~ .")),
                              data = train_data,
                              ntree = 100,
                              mtry = floor(sqrt(length(available_features))),
